@@ -1,0 +1,64 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: demo-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: demo
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d demo']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - demo-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: demo-pgadmin-container
+    restart: always
+    ports:
+      - '5050:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - demo-network
+
+  demo-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: demo-backend
+    restart: always
+    ports:
+      - '5000:5000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    networks:
+      - demo-network
+
+volumes:
+  postgres_data: {}
+  pgadmin_data: {}
+
+networks:
+  demo-network:
+    external: true

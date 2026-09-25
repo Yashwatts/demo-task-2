@@ -1,0 +1,22 @@
+services:
+  demo-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: demo-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    # depends_on:
+    #   - demo-backend
+    env_file:
+      - .env
+    networks:
+      - demo-network
+    volumes:
+      - .:/app
+
+networks:
+  demo-network:
+    external: true
