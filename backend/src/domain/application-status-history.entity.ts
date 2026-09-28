@@ -9,7 +9,7 @@ import {
 import { ApplicationStatus } from './enums/application-status.enum';
 import { JobApplication } from './job-application.entity';
 
-@Entity('application_status_histories')
+@Entity('applications_status_histories')
 export class ApplicationStatusHistory {
   @PrimaryGeneratedColumn('uuid')
   id: string;

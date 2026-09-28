@@ -41,7 +41,7 @@ export class ApplyJobHandler {
       const existinApplication = await queryRunner.manager.findOne(
         JobApplication,
         {
-          where: { job_id: { id: jobId }, applicant_id: { id: applicantId } },
+          where: { jobId, applicantId },
         },
       );
 
