@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/features/store";
-import { checkAuth } from "@/features/auth/auth.action";
+import { fetchCurrentUser } from "@/features/auth/auth.action";
 import { useRouter } from "next/navigation";
 import { Box, CircularProgress } from "@mui/material";
 import { Navbar } from "@/components/navbar/navbar";
@@ -21,7 +21,7 @@ export default function ProtectedLayout({
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        await dispatch(checkAuth()).unwrap();
+        await dispatch(fetchCurrentUser()).unwrap();
       } catch (err) {
         router.push("/login");
       } finally {

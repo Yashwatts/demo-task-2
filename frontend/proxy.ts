@@ -7,7 +7,10 @@ export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isAuthPage =
     pathname.startsWith("/login") || pathname.startsWith("/signup");
-  const isProtectedPage = pathname.startsWith("/dashboard");
+  const isProtectedPage =
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/applicant");
 
   if (isProtectedPage && !isAuthenticated) {
     return NextResponse.redirect(new URL("/login", request.url));
@@ -21,5 +24,11 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard", "/login", "/signup"],
+  matcher: [
+    "/dashboard/:path*",
+    "/admin/:path*",
+    "/applicant/:path*",
+    "/login",
+    "/signup",
+  ],
 };

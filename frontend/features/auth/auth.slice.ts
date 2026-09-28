@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { checkAuth, login, logout, signup } from "./auth.action";
+import { fetchCurrentUser, login, logout, signup } from "./auth.action";
 
 interface User {
   id: number;
   username: string;
   email: string;
+  role: "applicant" | "admin";
+  createdAt: string;
 }
 
 export interface AuthState {
@@ -63,15 +65,15 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      .addCase(checkAuth.pending, (state) => {
+      .addCase(fetchCurrentUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(checkAuth.fulfilled, (state, action) => {
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.user;
       })
-      .addCase(checkAuth.rejected, (state, action) => {
+      .addCase(fetchCurrentUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })

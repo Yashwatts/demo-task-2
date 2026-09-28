@@ -8,7 +8,7 @@ export class GetUserController {
   @Get()
   async getUser(@Req() req) {
     const userId = req.user.id;
-    const user = await this.getUserHandler.GetUser(userId);
+    const user = await this.getUserHandler.getUser(userId);
     if (!user) {
       throw new NotFoundException('User not found');
     }

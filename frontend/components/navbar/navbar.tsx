@@ -44,6 +44,8 @@ export function Navbar() {
     router.push("/login");
   };
 
+  const isAdmin = user?.role === "admin";
+
   return (
     <AppBar position="sticky" className={styles.navbar}>
       <Toolbar className={styles.toolbar}>
@@ -52,22 +54,73 @@ export function Navbar() {
           className={styles.logo}
           onClick={() => router.push("/home")}
         >
-          Demo Task
+          Mini ATS {isAdmin ? " Admin Portal" : " Candidate Portal"}
         </Typography>
 
-        {user && (
+        {isAdmin && (
           <Box className={styles.centerSection}>
             <Stack direction="row" spacing={1}>
               <Button
                 className={
-                  pathname === "/dashboard"
+                  pathname === "/admin/jobs"
                     ? styles.activeNavLink
                     : styles.navLink
                 }
                 color="inherit"
-                onClick={() => router.push("/dashboard")}
+                onClick={() => router.push("/admin/jobs")}
               >
-                Dashboard
+                Manage Jobs
+              </Button>
+              <Button
+                className={
+                  pathname === "/admin/applications"
+                    ? styles.activeNavLink
+                    : styles.navLink
+                }
+                color="inherit"
+                onClick={() => router.push("/admin/applications")}
+              >
+                Applications Pipeline
+              </Button>
+            </Stack>
+          </Box>
+        )}
+
+        {!isAdmin && (
+          <Box className={styles.centerSection}>
+            <Stack direction="row" spacing={1}>
+              <Button
+                className={
+                  pathname === "/applicant/jobs"
+                    ? styles.activeNavLink
+                    : styles.navLink
+                }
+                color="inherit"
+                onClick={() => router.push("/applicant/jobs")}
+              >
+                Browse Jobs
+              </Button>
+              <Button
+                className={
+                  pathname === "/applicant/applications"
+                    ? styles.activeNavLink
+                    : styles.navLink
+                }
+                color="inherit"
+                onClick={() => router.push("/applicant/applications")}
+              >
+                My Applications
+              </Button>
+              <Button
+                className={
+                  pathname === "/applicant/profile"
+                    ? styles.activeNavLink
+                    : styles.navLink
+                }
+                color="inherit"
+                onClick={() => router.push("/applicant/profile")}
+              >
+                Profile
               </Button>
             </Stack>
           </Box>

@@ -1,11 +1,20 @@
-import { Box, Typography } from "@mui/material";
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/features/hooks";
 
 export default function DashboardPage() {
-  return (
-    <Box>
-      <Typography variant="h4" component="h1">
-        Welcome to the Dashboard!
-      </Typography>
-    </Box>
-  );
+  const router = useRouter();
+  const { user } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (user?.role === "admin") {
+      router.push("/admin/jobs");
+    } else {
+      router.push("/applicant/jobs");
+    }
+  }, [user, router]);
+
+  return null;
 }

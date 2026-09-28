@@ -1,0 +1,19 @@
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.historyItem {
+  padding: 16px;
+  border-left: 4px solid #3182ce;
+  background-color: #f7fafc;
+  border-radius: 4px;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -21,7 +21,7 @@ import styles from "./login-form.module.css";
 export default function LoginForm() {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { isLoading } = useAppSelector((state) => state.auth);
+  const { isLoading, error } = useAppSelector((state) => state.auth);
   const {
     register,
     handleSubmit,

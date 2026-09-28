@@ -12,9 +12,17 @@ import typeOrmConfig from './infrastructure/database/config/orm.config';
 import { AuthModule } from './features/auth/auth.module';
 import { AuthMiddleware } from './infrastructure/app/middleware/auth.middleware';
 import { JwtModule } from '@nestjs/jwt';
+import { ProfileModule } from './features/profile/profile.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { JobsModule } from './features/jobs/jobs.module';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'uploads'),
+      serveRoot: '/uploads',
+    }),
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot(typeOrmConfig),
     JwtModule.registerAsync({
@@ -29,6 +37,8 @@ import { JwtModule } from '@nestjs/jwt';
       }),
     }),
     AuthModule,
+    ProfileModule,
+    JobsModule,
   ],
 
   controllers: [AppController],

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/domains/entities/user.entity';
+import { User } from 'src/domain/user.entity';
 import { LoginUserController } from './login-user.controller';
 import { LoginUserHandler } from './login-user.handler';
 

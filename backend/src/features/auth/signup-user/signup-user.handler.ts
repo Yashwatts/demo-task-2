@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SignupUserValidator } from './signup-user.validator';
-import { User } from 'src/domains/entities/user.entity';
+import { User } from 'src/domain/user.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -39,12 +39,14 @@ export class SignupUserHandler {
       sub: savedUser.id,
       username: savedUser.username,
       email: savedUser.email,
+      role: savedUser.role,
     });
     return {
       user: {
         id: savedUser.id,
         username: savedUser.username,
         email: savedUser.email,
+        role: savedUser.role,
       },
       token,
     };

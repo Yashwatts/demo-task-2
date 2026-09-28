@@ -28,8 +28,8 @@ export const login = createAsyncThunk(
   },
 );
 
-export const checkAuth = createAsyncThunk(
-  "auth/checkAuth",
+export const fetchCurrentUser = createAsyncThunk(
+  "auth/fetchCurrentUser",
   async (_, { getState, rejectWithValue }) => {
     const state = getState() as { auth: AuthState };
     if (state.auth.loggingOut) {

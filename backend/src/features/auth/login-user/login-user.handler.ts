@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/domains/entities/user.entity';
+import { User } from 'src/domain/user.entity';
 import { Repository } from 'typeorm';
 import { LoginUserValidator } from './login-user.validator';
 import * as bcrypt from 'bcrypt';
@@ -31,12 +31,14 @@ export class LoginUserHandler {
       id: user.id,
       username: user.username,
       email: user.email,
+      role: user.role,
     });
     return {
       user: {
         id: user.id,
         username: user.username,
         email: user.email,
+        role: user.role,
       },
       token,
     };
