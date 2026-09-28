@@ -87,6 +87,7 @@ export const fetchApplicationHistory = createAsyncThunk(
   async (applicationId: string, { rejectWithValue }) => {
     try {
       const response = await api.get(`/applications/${applicationId}/history`);
+      return response.data;
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch application history",

@@ -41,7 +41,7 @@ export class JobApplication {
 
   @OneToMany(
     () => ApplicationStatusHistory,
-    (history) => history.application_id,
+    (history) => history.application,
     {
       cascade: true,
     },

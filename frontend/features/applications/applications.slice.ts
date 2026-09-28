@@ -166,6 +166,7 @@ const applicationsSlice = createSlice({
       .addCase(
         fetchApplicationHistory.fulfilled,
         (state, action: PayloadAction<any>) => {
+          state.isLoading = false;
           state.activeHistory = action.payload.history || action.payload;
         },
       )

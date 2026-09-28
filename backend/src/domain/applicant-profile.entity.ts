@@ -15,7 +15,7 @@ export class ApplicantProfile {
   id: string;
 
   @OneToOne(() => User, (user) => user.profile, { onDelete: 'CASCADE' })
-  @JoinColumn()
+  @JoinColumn({ name: 'user_id' })
   user_id: User;
 
   @Column({

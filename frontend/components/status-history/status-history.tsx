@@ -52,29 +52,34 @@ export const StatusTimelineDialog: React.FC<StatusTimelineDialogProps> = ({
           </Typography>
         ) : (
           <Box className={styles.historyList}>
-            {activeHistory.map((item) => (
-              <Paper key={item.id} className={styles.historyItem} elevation={0}>
-                <Box className={styles.headerRow}>
-                  <Typography variant="subtitle2">
-                    {item.previousStatus
-                      ? `${item.previousStatus.toUpperCase()} → `
-                      : ""}
-                    {item.newStatus.toUpperCase()}
+            {activeHistory.map((item: any) => {
+              const previousStatus = item.previousStatus || item.previous_status;
+              const newStatus = item.newStatus || item.new_status;
+              const changedByName = item.changedByName || item.changed_by_name;
+              const changedByRole = item.changedByRole || item.changed_by_role;
+              const createdAt = item.createdAt || item.created_at;
+              return (
+                <Paper key={item.id} className={styles.historyItem} elevation={0}>
+                  <Box className={styles.headerRow}>
+                    <Typography variant="subtitle2">
+                      {previousStatus ? `${previousStatus.toUpperCase()} → ` : ""}
+                      {newStatus ? newStatus.toUpperCase() : ""}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {createdAt ? new Date(createdAt).toLocaleString() : ""}
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2">
+                    Changed by: <b>{changedByName}</b> ({changedByRole})
                   </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {new Date(item.createdAt).toLocaleString()}
-                  </Typography>
-                </Box>
-                <Typography variant="body2">
-                  Changed by: <b>{item.changedByName}</b> ({item.changedByRole})
-                </Typography>
-                {item.note && (
-                  <Typography variant="body2" color="text.secondary">
-                    Note: "{item.note}"
-                  </Typography>
-                )}
-              </Paper>
-            ))}
+                  {item.note && (
+                    <Typography variant="body2" color="text.secondary">
+                      Note: "{item.note}"
+                    </Typography>
+                  )}
+                </Paper>
+              );
+            })}
           </Box>
         )}
       </DialogContent>
