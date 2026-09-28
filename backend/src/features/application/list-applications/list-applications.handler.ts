@@ -13,15 +13,15 @@ export class ListApplicationsHandler {
     private readonly applicationRepository: Repository<JobApplication>,
     @InjectRepository(ApplicationStatusHistory)
     private readonly historyRepository: Repository<ApplicationStatusHistory>,
-  ) {}
+  ) { }
 
   async listForAdmin(query: ListApplicationsValidator) {
     await this.autoRejectExpiredApplications();
 
     const queryBuilder = this.applicationRepository
       .createQueryBuilder('app')
-      .leftJoinAndSelect('app.job', 'job')
-      .leftJoinAndSelect('app.applicant', 'applicant')
+      .leftJoinAndSelect('app.job_id', 'job')
+      .leftJoinAndSelect('app.applicant_id', 'applicant')
       .leftJoinAndSelect('applicant.profile', 'profile')
       .leftJoinAndSelect('app.statusHistory', 'statusHistory');
 
@@ -46,7 +46,7 @@ export class ListApplicationsHandler {
       });
     }
 
-    queryBuilder.orderBy('app.applied_at', 'DESC');
+    queryBuilder.orderBy('app.createdAt', 'DESC');
 
     const page = query.page || 1;
     const limit = query.limit || 10;
@@ -95,7 +95,7 @@ export class ListApplicationsHandler {
   async listForApplicant(applicantId: string, status?: ApplicationStatus) {
     const queryBuilder = this.applicationRepository
       .createQueryBuilder('app')
-      .leftJoinAndSelect('app.job', 'job')
+      .leftJoinAndSelect('app.job_id', 'job')
       .leftJoinAndSelect('app.statusHistory', 'statusHistory')
       .where('app.applicant_id = :applicantId', { applicantId });
 
@@ -103,7 +103,7 @@ export class ListApplicationsHandler {
       queryBuilder.andWhere('app.status = :status', { status });
     }
 
-    queryBuilder.orderBy('app.applied_at', 'DESC');
+    queryBuilder.orderBy('app.createdAt', 'DESC');
     const applications = await queryBuilder.getMany();
 
     return applications;
@@ -141,7 +141,7 @@ export class ListApplicationsHandler {
     const now = new Date();
     const expiredApplications = await this.applicationRepository
       .createQueryBuilder('app')
-      .innerJoin('app.job', 'job')
+      .innerJoin('app.job_id', 'job')
       .where('app.status = :status', { status: ApplicationStatus.APPLIED })
       .andWhere('job.application_deadline < :now', { now })
       .getMany();

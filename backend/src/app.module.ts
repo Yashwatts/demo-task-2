@@ -16,6 +16,7 @@ import { ProfileModule } from './features/profile/profile.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { JobsModule } from './features/jobs/jobs.module';
+import { ApplicationModule } from './features/application/application.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { JobsModule } from './features/jobs/jobs.module';
     AuthModule,
     ProfileModule,
     JobsModule,
+    ApplicationModule,
   ],
 
   controllers: [AppController],

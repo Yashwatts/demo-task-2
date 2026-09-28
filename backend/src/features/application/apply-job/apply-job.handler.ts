@@ -62,12 +62,12 @@ export class ApplyJobHandler {
       const initialHistory = queryRunner.manager.create(
         ApplicationStatusHistory,
         {
-          applicationId: savedApplication.id,
-          previousStatus: null,
-          newStatus: ApplicationStatus.APPLIED,
-          changedById: applicantId,
-          changedByName: applicantName,
-          changedByRole: UserRole.APPLICANT,
+          application_id: savedApplication.id,
+          previous_status: null,
+          new_status: ApplicationStatus.APPLIED,
+          changed_by_id: applicantId,
+          changed_by_name: applicantName,
+          changed_by_role: UserRole.APPLICANT,
           note: 'Application submitted by candidate',
         },
       );

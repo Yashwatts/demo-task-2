@@ -55,12 +55,12 @@ export class ChangeStatusHandler {
       const historyEntry = queryRunner.manager.create(
         ApplicationStatusHistory,
         {
-          applicationId: application.id,
-          previousStatus,
-          newStatus: validator.targetStatus,
-          changedById: actorId,
-          changedByName: actorName,
-          changedByRole: actorRole,
+          application_id: application.id,
+          previous_status: previousStatus,
+          new_status: validator.targetStatus,
+          changed_by_id: actorId,
+          changed_by_name: actorName,
+          changed_by_role: actorRole,
           note: validator.note || null,
         },
       );

@@ -7,4 +7,4 @@ import { ListApplicationsModule } from './list-applications/list-applications.mo
   imports: [ApplyJobModule, ChangeStatusModule, ListApplicationsModule],
   providers: [],
 })
-export class JobsModule {}
+export class ApplicationModule {}

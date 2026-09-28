@@ -36,13 +36,13 @@ export class ListJobsHandler {
     }
 
     if (query.employmentType) {
-      queryBuilder.andWhere('job.employmentType = :employmentType', {
+      queryBuilder.andWhere('job.employment_type = :employmentType', {
         employmentType: query.employmentType,
       });
     }
 
     if (query.minExperience !== undefined) {
-      queryBuilder.andWhere('job.minimumExperience <= :minExp', {
+      queryBuilder.andWhere('job.minimum_experience <= :minExp', {
         minExp: query.minExperience,
       });
     }
@@ -52,14 +52,14 @@ export class ListJobsHandler {
     }
 
     if (query.tag) {
-      queryBuilder.andWhere(':tag = ANY(job.requiredSkills)', {
+      queryBuilder.andWhere(':tag = ANY(job.required_skills)', {
         tag: query.tag,
       });
     }
 
     const sortField =
       query.sortBy === 'applicationDeadline'
-        ? 'job.applicationDeadline'
+        ? 'job.application_deadline'
         : 'job.createdAt';
     queryBuilder.orderBy(sortField, query.sortOrder || 'DESC');
 
@@ -132,7 +132,7 @@ export class ListJobsHandler {
 
     queryBuilder
       .where('job.status = :status', { status: JobStatus.OPEN })
-      .andWhere('job.applicationDeadline > :now', { now: new Date() });
+      .andWhere('job.application_deadline > :now', { now: new Date() });
 
     if (query.search) {
       queryBuilder.andWhere('LOWER(job.title) LIKE LOWER(:search)', {
@@ -153,26 +153,26 @@ export class ListJobsHandler {
     }
 
     if (query.employmentType) {
-      queryBuilder.andWhere('job.employmentType = :employmentType', {
+      queryBuilder.andWhere('job.employment_type = :employmentType', {
         employmentType: query.employmentType,
       });
     }
 
     if (query.minExperience !== undefined) {
-      queryBuilder.andWhere('job.minimumExperience <= :minExp', {
+      queryBuilder.andWhere('job.minimum_experience <= :minExp', {
         minExp: query.minExperience,
       });
     }
 
     if (query.tag) {
-      queryBuilder.andWhere(':tag = ANY(job.requiredSkills)', {
+      queryBuilder.andWhere(':tag = ANY(job.required_skills)', {
         tag: query.tag,
       });
     }
 
     const sortField =
       query.sortBy === 'applicationDeadline'
-        ? 'job.applicationDeadline'
+        ? 'job.application_deadline'
         : 'job.createdAt';
     queryBuilder.orderBy(sortField, query.sortOrder || 'DESC');
 
