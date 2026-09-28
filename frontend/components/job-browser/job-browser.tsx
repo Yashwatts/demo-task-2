@@ -25,7 +25,9 @@ export const ApplicantJobBrowser: React.FC = () => {
   const { isSubmitting } = useAppSelector((state) => state.applications);
 
   useEffect(() => {
-    dispatch(fetchJobs({ page, search: searchQuery, status: "open" }));
+    dispatch(
+      fetchJobs({ page, search: searchQuery, status: "open", role: "applicant" }),
+    );
   }, [dispatch, page, searchQuery]);
 
   const handleApply = async (jobId: string) => {
@@ -56,7 +58,7 @@ export const ApplicantJobBrowser: React.FC = () => {
                 <Box>
                   <Typography variant="h6">{job.title}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {job.department} • {job.location} • {job.employmentType}
+                    {job.department} • {job.location} • {job.employmentType || job.employment_type}
                   </Typography>
                 </Box>
                 <Button
@@ -69,11 +71,11 @@ export const ApplicantJobBrowser: React.FC = () => {
               </Box>
 
               <Typography variant="body2">
-                Required Experience: <b>{job.minimumExperience}+ years</b>
+                Required Experience: <b>{job.minimumExperience ?? job.minimum_experience ?? 0}+ years</b>
               </Typography>
 
               <Box>
-                {job.requiredSkills.map((skill) => (
+                {(job.requiredSkills || job.required_skills || []).map((skill) => (
                   <Chip
                     key={skill}
                     label={skill}

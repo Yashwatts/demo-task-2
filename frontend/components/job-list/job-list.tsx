@@ -49,7 +49,7 @@ export const AdminJobList: React.FC = () => {
   const [deadline, setDeadline] = useState("");
 
   useEffect(() => {
-    dispatch(fetchJobs({ page, search: searchQuery }));
+    dispatch(fetchJobs({ page, search: searchQuery, role: "admin" }));
   }, [dispatch, page, searchQuery]);
 
   const handleOpenCreate = () => {
@@ -69,36 +69,27 @@ export const AdminJobList: React.FC = () => {
       .split(",")
       .map((s) => s.trim())
       .filter(Boolean);
-    if (editingJobId) {
-      await dispatch(
-        editJob({
-          id: editingJobId,
-          payload: {
-            title,
-            department,
-            location,
-            employmentType,
-            minimumExperience: Number(minimumExperience),
-            requiredSkills: skills,
-            applicationDeadline: deadline,
-          },
-        }),
-      );
-    } else {
-      await dispatch(
-        createJob({
-          title,
-          department,
-          location,
-          employmentType,
-          minimumExperience: Number(minimumExperience),
-          requiredSkills: skills,
-          applicationDeadline: deadline,
-        }),
-      );
+
+    const payload = {
+      title,
+      department,
+      location,
+      employmentType,
+      minimumExperience: Number(minimumExperience),
+      requiredSkills: skills,
+      applicationDeadline: deadline
+        ? new Date(deadline).toISOString()
+        : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    };
+
+    const result = editingJobId
+      ? await dispatch(editJob({ id: editingJobId, payload }))
+      : await dispatch(createJob(payload));
+
+    if (createJob.fulfilled.match(result) || editJob.fulfilled.match(result)) {
+      setDialogOpen(false);
+      dispatch(fetchJobs({ page, search: searchQuery, role: "admin" }));
     }
-    setDialogOpen(false);
-    dispatch(fetchJobs({ page, search: searchQuery }));
   };
 
   const handleClosePosting = async (id: string) => {
@@ -146,8 +137,8 @@ export const AdminJobList: React.FC = () => {
                   <TableCell>{job.title}</TableCell>
                   <TableCell>{job.department}</TableCell>
                   <TableCell>{job.location}</TableCell>
-                  <TableCell>{job.employmentType}</TableCell>
-                  <TableCell>{job.minimumExperience}+ yrs</TableCell>
+                  <TableCell>{job.employmentType || job.employment_type}</TableCell>
+                  <TableCell>{job.minimumExperience ?? job.minimum_experience ?? 0}+ yrs</TableCell>
                   <TableCell>
                     <Chip
                       label={job.status.toUpperCase()}

@@ -6,12 +6,17 @@ export interface Job {
   title: string;
   department: string;
   location: string;
-  employmentType: "full-time" | "part-time" | "contract" | "internship";
-  minimumExperience: number;
-  requiredSkills: string[];
-  applicationDeadline: string;
+  employmentType?: "full-time" | "part-time" | "contract" | "internship";
+  employment_type?: "full-time" | "part-time" | "contract" | "internship";
+  minimumExperience?: number;
+  minimum_experience?: number;
+  requiredSkills?: string[];
+  required_skills?: string[];
+  applicationDeadline?: string;
+  application_deadline?: string;
   status: "open" | "closed";
-  createdAt: string;
+  createdAt?: string;
+  created_at?: string;
 }
 
 interface JobState {
@@ -76,12 +81,14 @@ const jobsSlice = createSlice({
       })
       .addCase(fetchJobs.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.items = action.payload.items;
-        state.total = action.payload.total;
-        state.page = action.payload.page;
-        state.limit = action.payload.limit;
-        state.totalPages = action.payload.totalPages;
+        state.items = action.payload.items || [];
+        const meta = action.payload.meta || action.payload;
+        state.total = meta.total || 0;
+        state.page = meta.page || 1;
+        state.limit = meta.limit || 10;
+        state.totalPages = meta.totalPages || 1;
       })
+
       .addCase(fetchJobs.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
@@ -93,7 +100,10 @@ const jobsSlice = createSlice({
       })
       .addCase(createJob.fulfilled, (state, action) => {
         state.isSubmitting = false;
-        state.items.unshift(action.payload.job);
+        const newJob = action.payload?.job || action.payload;
+        if (newJob && newJob.id) {
+          state.items.unshift(newJob);
+        }
         state.successMessage = "Job created successfully!";
       })
       .addCase(createJob.rejected, (state, action) => {
@@ -105,11 +115,15 @@ const jobsSlice = createSlice({
         state.error = null;
       })
       .addCase(editJob.fulfilled, (state, action) => {
-        const index = state.items.findIndex(
-          (job) => job.id === action.payload.job.id,
-        );
-        if (index !== -1) {
-          state.items[index] = action.payload.job;
+        state.isSubmitting = false;
+        const updatedJob = action.payload?.job || action.payload;
+        if (updatedJob && updatedJob.id) {
+          const index = state.items.findIndex(
+            (job) => job.id === updatedJob.id,
+          );
+          if (index !== -1) {
+            state.items[index] = updatedJob;
+          }
         }
         state.successMessage = "Job updated successfully!";
       })
@@ -122,11 +136,15 @@ const jobsSlice = createSlice({
         state.error = null;
       })
       .addCase(closeJob.fulfilled, (state, action) => {
-        const index = state.items.findIndex(
-          (job) => job.id === action.payload.job.id,
-        );
-        if (index !== -1) {
-          state.items[index].status = "closed";
+        state.isSubmitting = false;
+        const closedJob = action.payload?.job || action.payload;
+        if (closedJob && closedJob.id) {
+          const index = state.items.findIndex(
+            (job) => job.id === closedJob.id,
+          );
+          if (index !== -1) {
+            state.items[index].status = "closed";
+          }
         }
         state.successMessage = "Job marked as closed!";
       })

@@ -12,7 +12,7 @@ export class ListJobsHandler {
     @InjectRepository(Job) private readonly jobRepository: Repository<Job>,
     @InjectRepository(JobApplication)
     private readonly applicationRepository: Repository<JobApplication>,
-  ) {}
+  ) { }
 
   async listJobsForAdmin(query: ListJobsValidator) {
     const queryBuilder = this.jobRepository.createQueryBuilder('job');
@@ -75,11 +75,11 @@ export class ListJobsHandler {
     if (jobIds.length > 0) {
       const summaries = await this.applicationRepository
         .createQueryBuilder('app')
-        .select('app.job_id', 'jobId')
+        .select('app.jobId', 'jobId')
         .addSelect('app.status', 'status')
         .addSelect('COUNT(app.id)', 'count')
-        .where('app.job_id IN (:...jobIds)', { jobIds })
-        .groupBy('app.job_id')
+        .where('app.jobId IN (:...jobIds)', { jobIds })
+        .groupBy('app.jobId')
         .addGroupBy('app.status')
         .getRawMany();
 

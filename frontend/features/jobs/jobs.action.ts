@@ -10,6 +10,7 @@ export interface JobFilterParams {
   employmentType?: string;
   minExperience?: number;
   status?: string;
+  role?: "admin" | "applicant";
 }
 
 export interface CreateJobPayload {
@@ -30,7 +31,9 @@ export const fetchJobs = createAsyncThunk(
   "jobs/fetchJobs",
   async (params: JobFilterParams = {}, { rejectWithValue }) => {
     try {
-      const response = await api.get("/jobs", { params });
+      const { role, ...queryParams } = params;
+      const endpoint = role === "applicant" ? "/jobs/applicant" : "/jobs/admin";
+      const response = await api.get(endpoint, { params: queryParams });
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
